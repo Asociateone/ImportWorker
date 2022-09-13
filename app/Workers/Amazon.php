@@ -3,7 +3,8 @@
 namespace App\Workers;
 
 Class Amazon {
-    public function test()
+
+    public function apiCall()
     {
         echo "test";
     }
