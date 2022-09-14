@@ -1,7 +1,11 @@
 {
   "autoload": {
     "psr-4": {
-      "App\\Workers\\": "app/Workers"
+      "App\\Workers\\": "app/Workers",
+      "App\\Helpers\\": "app/Helpers"
     }
+  },
+  "require": {
+    "ext-curl": "*"
   }
 }
