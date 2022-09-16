@@ -8,8 +8,8 @@ Class Amazon {
 
     public function apiCall()
     {
-        $test = new apiCaller('url', 'test');
+        $test = new apiCaller('https://id.twitch.tv/', 'test');
 
-        $test->call();
+        $test->call('oauth2');
     }
 }

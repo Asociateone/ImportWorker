@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+
+use GuzzleHttp\Client;
+
 class apiCaller
 {
     private string $url;
@@ -16,17 +19,18 @@ class apiCaller
     {
         $this->url = $url;
         $this->client_id = $client_id;
-
-        //load in env file
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-        $dotenv->load();
     }
 
-    public function call()
+    public function call(string $link)
     {
-        echo getenv("TEST");
-//        $ch = curl_init("https://id.twitch.tv/oauth2/");
-//        $output = curl_exec($ch);
-//        echo $output;
+        $client = new Client([
+            'base_uri' => $this->url,
+        ]);
+
+        try {
+            $response = $client->request('POST', $link);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
