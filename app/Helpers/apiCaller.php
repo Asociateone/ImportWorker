@@ -26,7 +26,6 @@ class apiCaller
 
     /**
      * @param string $link
-     * @return int|void
      * @throws GuzzleException
      */
     public function call(string $link)
@@ -44,7 +43,7 @@ class apiCaller
                 ],
             ]);
 
-            return $response->getStatusCode();
+            return $response->getBody();
         } catch (Exception $e) {
             echo $e->getMessage();
         }

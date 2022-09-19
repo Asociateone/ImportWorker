@@ -6,4 +6,4 @@ use App\Workers\Amazon;
 
 $new = new Amazon();
 
-$new->apiCall();
+$new->getToken();
