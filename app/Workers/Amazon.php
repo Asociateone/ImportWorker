@@ -10,6 +10,6 @@ Class Amazon {
     {
         $test = new apiCaller('https://id.twitch.tv/', 'test');
 
-        $test->call('oauth2');
+        $test->call('oauth2/token');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use GuzzleHttp\Client;
 use Symfony\Component\Dotenv\Dotenv;
 
 class apiCaller
@@ -25,11 +26,20 @@ class apiCaller
     public function call(string $link)
     {
         $client = new Client([
-            'base_uri' => $this->url,
+            'base_uri' => $this->url
         ]);
 
+
         try {
-            $response = $client->request('POST', $link);
+            $response = $client->request('POST', $link, [
+                'form_params' => [
+                    'client_id' => $_ENV['AMAZON_CLIENT_ID'],
+                    'client_secret' => $_ENV['AMAZON_SECRET_CLIENT_ID'],
+                    'grant_type' => $_ENV['GRANT_TYPE'],
+                ],
+            ]);
+
+            print_r($response);
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
