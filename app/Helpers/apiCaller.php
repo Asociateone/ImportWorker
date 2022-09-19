@@ -2,15 +2,13 @@
 
 namespace App\Helpers;
 
-
-use GuzzleHttp\Client;
+use Symfony\Component\Dotenv\Dotenv;
 
 class apiCaller
 {
     private string $url;
     private string $client_id;
     private string $token;
-
 
     /**
      * @return void
@@ -19,6 +17,9 @@ class apiCaller
     {
         $this->url = $url;
         $this->client_id = $client_id;
+
+        $dotenv = new Dotenv();
+        $dotenv->loadEnv('./.env');
     }
 
     public function call(string $link)
