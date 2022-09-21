@@ -7,7 +7,6 @@ use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Dotenv\Dotenv;
 
 Class Amazon {
-
     /**
      * @return void
      */
@@ -21,12 +20,22 @@ Class Amazon {
      * @return string
      * @throws GuzzleException
      */
-    public function getToken(): string
+    private function getToken(): string
     {
-        $test = new apiCaller('https://id.twitch.tv/', $_ENV);
+        $apiCall = new apiCaller('https://id.twitch.tv/', $_ENV);
 
-        $call = json_decode($test->call('oauth2/token'), true);
+        $call = json_decode($apiCall->callAuth('oauth2/token'), true);
 
         return $call['access_token'];
+    }
+
+    public function getGames(): array
+    {
+        $apiCall = new apiCaller('https://api.igdb.com/', $_ENV);
+
+        $items = $apiCall->callBearer('v4/games', $this->getToken(), 'fields cover,url,name; search "pokemon"; limit 50;');
+
+        var_dump(json_decode($items, true));
+        return [];
     }
 }
