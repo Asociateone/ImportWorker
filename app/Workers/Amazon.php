@@ -35,7 +35,10 @@ Class Amazon {
 
         $items = $apiCall->callBearer('v4/games', $this->getToken(), 'fields cover,url,name; search "pokemon"; limit 50;');
 
-        var_dump(json_decode($items, true));
+        $arrayGames = json_decode($items, true);
+
+        print(count($arrayGames));
+
         return [];
     }
 }
