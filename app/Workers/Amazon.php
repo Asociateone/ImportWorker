@@ -3,17 +3,23 @@
 namespace App\Workers;
 
 use App\Helpers\apiCaller;
-use GuzzleHttp\Exception\GuzzleException;
+use App\Helpers\mysqlConnector;
 use Symfony\Component\Dotenv\Dotenv;
+use GuzzleHttp\Exception\GuzzleException;
 
 Class Amazon {
+
+    private string $token;
+
     /**
-     * @return void
+     * @throws GuzzleException
      */
     public function __construct()
     {
         $dotenv = new Dotenv();
         $dotenv->loadEnv('./.env');
+
+        $this->token = $this->getToken();
     }
 
     /**
@@ -29,16 +35,53 @@ Class Amazon {
         return $call['access_token'];
     }
 
-    public function getGames(): array
+    public function storeGames(): array
     {
+        $gamesArray = [];
+
         $apiCall = new apiCaller('https://api.igdb.com/', $_ENV);
 
-        $items = $apiCall->callBearer('v4/games', $this->getToken(), 'fields cover,url,name; search "pokemon"; limit 50;');
+        $items = $apiCall->callBearer('v4/games', $this->token, 'fields cover,url,name; search "pokemon"; limit 500;');
 
-        $arrayGames = json_decode($items, true);
+        $games = json_decode($items, true);
 
-        print(count($arrayGames));
+        foreach($games as $game)
+        {
+            if(! empty($game['cover']))
+            {
+//                $game['cover'] = $this->getCoverUrl($apiCall, $game['cover']);
+            }
+
+            unset($game['id']);
+
+            $gamesArray[] = $game;
+        }
+
+        echo "==================The games has been placed in an array=====================";
+
+//        $values  = implode("', '", $escaped_values);
+//        $sql = "INSERT INTO `fbdata`($columns) VALUES ('$values')";
+
+//        $db = new mysqlConnector();
+//        $data = $db->query('SELECT * FROM games');
+//
+//        var_dump($data);
+//
+//        $db->quitConnection();
 
         return [];
     }
+
+    private function getCoverUrl(ApiCaller $apiCall, int $cover_id): string
+    {
+        $image = $apiCall->callBearer('v4/covers', $this->token, "fields url; where id = $cover_id;");
+
+        $image = json_decode($image, true);
+
+        $url = str_replace('t_thumb','t_cover_big', $image[0]['url']);
+
+        return 'https:' . $url;
+    }
+
+
 }
